@@ -113,6 +113,23 @@ if ($this->StartResultCache()) {
 
     $APPLICATION->SetTitle('В каталоге товаров представлено товаров: ' . count($allItems));
 
+
+    if ($APPLICATION->GetShowIncludeAreas()) {
+
+        $IBLOCK = GetIBlock($arParams['IBLOCK_CATALOG']);
+
+        $urlIBLOCK = "/bitrix/admin/iblock_section_admin.php?IBLOCK_ID=" . $IBLOCK['ID'] . "&type=" . $IBLOCK['IBLOCK_TYPE_ID'] . "&lang=ru&find_section_section=0";
+
+        $this->AddIncludeAreaIcon(
+            array(
+                'URL'   => $urlIBLOCK,
+                'TITLE' => "ИБ в админке",
+                "IN_PARAMS_MENU" => true
+            )
+        );
+    }
+
+
     $this->IncludeComponentTemplate();
 } else {
     $this->AbortResultCache();
