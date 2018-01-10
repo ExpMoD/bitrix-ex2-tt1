@@ -104,7 +104,7 @@ if ($this->StartResultCache()) {
     }
 
     $arResult = array(
-        "ALL_ITEMS" => $allItems,
+        "COUNT_ITEMS" => $allItems,
         "NEWS" => $catalogByNews
     );
 
@@ -124,10 +124,13 @@ if ($this->StartResultCache()) {
         );
     }
 
+
+    $this->setResultCacheKeys(array("COUNT_ITEMS"));
+
     $this->IncludeComponentTemplate();
     $this->endResultCache();
 
-    $APPLICATION->SetTitle('В каталоге товаров представлено товаров: ' . count($allItems));
+    $APPLICATION->SetTitle('В каталоге товаров представлено товаров: ' . $arResult['COUNT_ITEMS']);
 } else {
     $this->AbortResultCache();
 }
