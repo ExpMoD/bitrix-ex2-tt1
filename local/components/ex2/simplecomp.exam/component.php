@@ -27,6 +27,8 @@ if ($this->StartResultCache()) {
 
 
     $catalogByNews = array();
+    $sectionsIds = array();
+    $newsIds = array();
 
     $rsSelect = array(
         $arParams['USER_PROPERTY']
@@ -44,6 +46,8 @@ if ($this->StartResultCache()) {
             $catalogByNews[$v]['SECTIONS'][$section['ID']] = array(
                 "NAME" => $section['NAME']
             );
+            $sectionsIds[$section['ID']] = $section['ID'];
+            $newsIds[$v] = $v;
         }
     }
 
@@ -59,6 +63,7 @@ if ($this->StartResultCache()) {
     $rsFilter = array(
         "IBLOCK_ID" => $arParams['IBLOCK_CATALOG'],
         "ACTIVE" => "Y",
+        "IBLOCK_SECTION_ID" => $sectionsIds,
     );
 
     $arElements = CIBlockElement::GetList(array(), $rsFilter, false, false, $rsSelect);
@@ -73,6 +78,7 @@ if ($this->StartResultCache()) {
                         "PRICE" => $element['PROPERTY_PRICE_VALUE'],
                         "ARTNUMBER" => $element['PROPERTY_ARTNUMBER_VALUE'],
                     );
+                    break;
                 }
             }
         }
@@ -83,6 +89,7 @@ if ($this->StartResultCache()) {
     $rsFilter = array(
         "IBLOCK_ID" => $arParams['IBLOCK_NEWS'],
         "ACTIVE" => "Y",
+        "ID" => $newsIds,
     );
 
     $arNews = CIBlockElement::GetList(array(), $rsFilter, false, false, $rsSelect);
@@ -104,7 +111,7 @@ if ($this->StartResultCache()) {
     }
 
     $arResult = array(
-        "COUNT_ITEMS" => $allItems,
+        "COUNT_ITEMS" => count($allItems),
         "NEWS" => $catalogByNews
     );
 
@@ -128,10 +135,8 @@ if ($this->StartResultCache()) {
     $this->setResultCacheKeys(array("COUNT_ITEMS"));
 
     $this->IncludeComponentTemplate();
-    $this->endResultCache();
-
-    $APPLICATION->SetTitle('В каталоге товаров представлено товаров: ' . $arResult['COUNT_ITEMS']);
-} else {
-    $this->AbortResultCache();
 }
+
+
+$APPLICATION->SetTitle('В каталоге товаров представлено товаров: ' . $arResult['COUNT_ITEMS']);
 ?>
